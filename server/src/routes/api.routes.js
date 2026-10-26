@@ -1,0 +1,21 @@
+import { Router } from 'express';
+import { rateLimit } from 'express-rate-limit';
+import { env } from '../config/env.js';
+import { validateBody } from '../middleware/validate.js';
+import { createMysterySchema } from '../schemas/mystery.schema.js';
+import * as mystery from '../controllers/mystery.controller.js';
+import * as investigation from '../controllers/investigation.controller.js';
+
+const router = Router();
+const creationLimit = rateLimit({ windowMs: env.rateLimitWindowMs, limit: env.rateLimitMaxRequests, standardHeaders: 'draft-7', legacyHeaders: false });
+router.get('/health', (req, res) => res.json({ success: true, data: { status: 'ok' } }));
+router.post('/mysteries', creationLimit, validateBody(createMysterySchema), mystery.postMystery);
+router.get('/mysteries/:caseId/status', mystery.getStatus);
+router.get('/mysteries/:caseId', mystery.getMystery);
+router.get('/mysteries/:caseId/evidence', mystery.getEvidence);
+router.get('/mysteries/:caseId/evidence/:evidenceId', mystery.getEvidenceDetail);
+router.post('/mysteries/:caseId/investigations', mystery.createInvestigation);
+router.post('/investigations/:investigationId/evidence/:evidenceId/view', investigation.recordEvidenceView);
+router.post('/investigations/:investigationId/accusation', investigation.submitAccusation);
+router.get('/investigations/:investigationId/results', investigation.getResults);
+export default router;

@@ -1,0 +1,13 @@
+{
+  "name": "ai-mystery-room",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n server,client -c yellow,cyan \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "start": "npm run start --prefix server",
+    "build": "npm run build --prefix client",
+    "test": "npm run test --prefix server && npm run test --prefix client"
+  },
+  "devDependencies": { "concurrently": "^9.1.2" }
+}
