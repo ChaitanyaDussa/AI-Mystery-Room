@@ -7,6 +7,7 @@ import apiRoutes from './routes/api.routes.js';
 import { errorHandler, notFound } from './middleware/error.middleware.js';
 
 const app = express();
+
 app.disable('x-powered-by');
 app.use(helmet());
 app.use(cors({ origin: env.clientUrl, credentials: true }));
